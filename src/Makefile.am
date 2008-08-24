@@ -16,10 +16,12 @@ xcbinclude_HEADERS = \
 	sync.xml \
 	xc_misc.xml \
 	xevie.xml \
-	xinerama.xml \
 	xf86dri.xml \
 	xfixes.xml \
+	xinerama.xml \
+	xinput.xml \
 	xprint.xml \
+	xselinux.xml \
 	xtest.xml \
 	xv.xml \
 	xvmc.xml

@@ -61,9 +61,9 @@ authorization from the authors.
 
     <typedef oldname="CARD8" newname="ElementHeader" />
     <enum name="HType">
-	<item name="FromServerTime"><value>0x01</value></item>
-	<item name="FromClientTime"><value>0x02</value></item>
-	<item name="FromClientSequence"><value>0x04</value></item>
+	<item name="FromServerTime"><bit>0</bit></item>
+	<item name="FromClientTime"><bit>1</bit></item>
+	<item name="FromClientSequence"><bit>2</bit></item>
     </enum>
 
     <typedef oldname="CARD32" newname="ClientSpec" />
@@ -158,7 +158,12 @@ authorization from the authors.
 	    <field type="CARD32" name="server_time" />
 	    <field type="CARD32" name="rec_sequence_num" />
 	    <pad bytes="8" />
-	    <list type="BYTE" name="data" />
+	    <list type="BYTE" name="data">
+		<op op="*">
+		    <fieldref>length</fieldref>
+		    <value>4</value>
+		</op>
+	    </list>
 	</reply>
     </request>
 	    
