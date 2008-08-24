@@ -7,7 +7,7 @@ DEB_MAKE_CHECK_TARGET=check
 DEB_DH_INSTALL_SOURCEDIR=debian/tmp
 DEB_DESTDIR=$(CURDIR)/debian/tmp
 
-pre-build clean:: configure
+pre-build:: configure
 
 configure:
 	autoreconf -f -i -v
