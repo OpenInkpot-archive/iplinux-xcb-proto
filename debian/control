@@ -3,7 +3,7 @@ Section: libdevel
 Priority: optional
 Maintainer: Mikhail Gusarov <dottedmag@dottedmag.net>
 Build-Depends: cdbs, debhelper (>= 5), libxml2-utils
-XCS-Cross-Host-Build-Depends: cdbs, debhelper (>= 5), libxml2-utils
+XCS-Cross-Host-Build-Depends: python2.5, cdbs, debhelper (>= 5), libxml2-utils
 Standards-Version: 3.7.2
 XS-Vcs-Git: git://anongit.freedesktop.org/git/xcb/proto
 XS-Vcs-Browser: http://gitweb.freedesktop.org/?p=xcb/proto.git
