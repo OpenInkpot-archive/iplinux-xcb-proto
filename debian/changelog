@@ -1,3 +1,9 @@
+xcb-proto (1.2-1) asimov; urgency=low
+
+  * First build for IPlinux.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Sat, 14 Mar 2009 04:23:38 +0600
+
 xcb-proto (1.2-0.oi2) unstable; urgency=low
 
   * Python generator installed as well.
