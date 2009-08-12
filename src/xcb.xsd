@@ -50,6 +50,9 @@ authorization from the authors.
   <xsd:complexType name="var">
     <xsd:attribute name="name" type="xsd:string" use="required" />
     <xsd:attribute name="type" type="xsd:string" use="required" />
+    <xsd:attribute name="enum" type="xsd:string" use="optional" />
+    <xsd:attribute name="altenum" type="xsd:string" use="optional" />
+    <xsd:attribute name="mask" type="xsd:string" use="optional" />
   </xsd:complexType>
 
   <!-- field replaces FIELD, PARAM, and REPLY. -->
@@ -109,6 +112,8 @@ authorization from the authors.
     <xsd:complexType>
       <xsd:attribute name="value-mask-type" type="xsd:string" use="required" />
       <xsd:attribute name="value-mask-name" type="xsd:string" use="required" />
+      <!-- This pad is currently needed only by ConfigureWindow.  Sigh. -->
+      <xsd:attribute name="value-mask-pad" type="xsd:integer" use="optional" />
       <xsd:attribute name="value-list-name" type="xsd:string" use="required" />
     </xsd:complexType>
   </xsd:element>

@@ -114,10 +114,12 @@ class Enum(SimpleType):
 
     Public fields added:
     values contains a list of (name, value) tuples.  value is empty, or a number.
+    bits contains a list of (name, bitnum) tuples.  items only appear if specified as a bit. bitnum is a number.
     '''
     def __init__(self, name, elt):
         SimpleType.__init__(self, name, 4)
         self.values = []
+        self.bits = []
         for item in list(elt):
             # First check if we're using a default value
             if len(list(item)) == 0:
@@ -129,8 +131,8 @@ class Enum(SimpleType):
             if value.tag == 'value':
                 self.values.append((item.get('name'), value.text))
             elif value.tag == 'bit':
-                # XXX replace this with a simple number, please.
-                self.values.append((item.get('name'), '(1 << %s)' % value.text))
+                self.values.append((item.get('name'), '%u' % (1 << int(value.text))))
+                self.bits.append((item.get('name'), value.text))
 
     def resolve(self, module):
         self.resolved = True
@@ -233,15 +235,15 @@ class ExprType(Type):
     def fixed_size(self):
         return True
 
-class PadType(Type):
+class SizedPadType(Type):
     '''
-    Derived class which represents a padding field.
+    Derived class which represents a padding field of given size.
     '''
-    def __init__(self, elt):
+    def __init__(self, size):
         Type.__init__(self, tcard8.name)
         self.is_pad = True
         self.size = 1
-        self.nmemb = 1 if (elt == None) else int(elt.get('bytes'))
+        self.nmemb = int(size)
 
     def resolve(self, module):
         self.resolved = True
@@ -249,6 +251,13 @@ class PadType(Type):
     def fixed_size(self):
         return True
 
+class PadType(SizedPadType):
+    '''
+    Derived class which represents a padding field of given type.
+    '''
+    def __init__(self, elt):
+        self.nmemb = "1" if (elt == None) else elt.get('bytes')
+        SizedPadType.__init__(self, self.nmemb)
     
 class ComplexType(Type):
     '''
@@ -272,6 +281,7 @@ class ComplexType(Type):
 
         # Resolve all of our field datatypes.
         for child in list(self.elt):
+            value_mask_pad = None
             if child.tag == 'pad':
                 field_name = 'pad' + str(pads)
                 fkey = 'CARD8'
@@ -298,6 +308,7 @@ class ComplexType(Type):
                 fkey = 'CARD32'
                 type = ListType(child, module.get_type(fkey), self)
                 visible = True
+                value_mask_pad = child.get('value-mask-pad')
             else:
                 # Hit this on Reply
                 continue 
@@ -308,6 +319,17 @@ class ComplexType(Type):
             type.make_member_of(module, self, field_type, field_name, visible, True, False)
             # Recursively resolve the type (could be another structure, list)
             type.resolve(module)
+
+            # Add a value-mask-pad if necessary
+            if value_mask_pad != None:
+                vmp_field_name = 'pad' + str(pads)
+                vmp_fkey = 'CARD8'
+                vmp_type = SizedPadType(value_mask_pad)
+                pads = pads + 1
+                vmp_visible = False
+                vmp_field_type = module.get_type_name(vmp_fkey)
+                vmp_type.make_member_of(module, self, vmp_field_type, vmp_field_name, vmp_visible, True, False)
+                vmp_type.resolve(module)
 
         self.calc_size() # Figure out how big we are
         self.resolved = True
