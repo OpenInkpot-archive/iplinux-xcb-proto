@@ -1,3 +1,9 @@
+xcb-proto (1.6-1) zelazny; urgency=low
+
+  * New upstream release.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Sat, 26 Dec 2009 13:16:14 +0600
+
 xcb-proto (1.5-1) asimov; urgency=low
 
   * New upstream release.
